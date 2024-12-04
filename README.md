@@ -90,12 +90,12 @@ This is a backend service for managing vouchers. The service is built with Go an
     }'
     ```
 
-### Get All Vouchers
+### Get Voucher by Id
 - **Endpoint**: `/voucher`
 - **Method**: `GET`
 - **Request**:
     ```sh
-    curl -X GET http://localhost:8080/voucher
+    curl -X GET http://localhost:8080/voucher?id=1
     ```
 
 ### Get Vouchers by Brand
