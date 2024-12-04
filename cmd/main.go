@@ -6,13 +6,14 @@ import (
 	"net/http"
 	"os"
 
+	"voucher-api/pkg/handler"
+	"voucher-api/pkg/repository"
+	"voucher-api/pkg/usecase"
+
 	"github.com/gorilla/mux"
 	"github.com/jmoiron/sqlx"
 	"github.com/joho/godotenv"
-	"voucher-api/pkg/repository"
-	"voucher-api/pkg/usecase"
-	"voucher-api/pkg/handler"
-  _ "github.com/lib/pq"
+	_ "github.com/lib/pq"
 )
 
 func init() {

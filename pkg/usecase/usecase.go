@@ -10,7 +10,7 @@ type UseCase interface {
 	CreateVoucher(brandID int, costInPoints float64, voucherCode string) (*model.Voucher, error)
 	GetVoucherByID(id string) (*model.Voucher, error)
 	GetVouchersByBrand(brandID string) ([]model.Voucher, error)
-	MakeRedemption(customerID int, voucherIDs []int, totalCostInPoints float64) (*model.Transaction, error)
+	MakeRedemption(customerID int, voucherIDs []int) (*model.Transaction, error)
 	GetTransactionDetail(transactionID string) (*model.Transaction, error)
 }
 
@@ -38,8 +38,8 @@ func (uc *useCase) GetVouchersByBrand(brandID string) ([]model.Voucher, error) {
 	return uc.repo.GetVouchersByBrand(brandID)
 }
 
-func (uc *useCase) MakeRedemption(customerID int, voucherIDs []int, totalCostInPoints float64) (*model.Transaction, error) {
-	return uc.repo.MakeRedemption(customerID, voucherIDs, totalCostInPoints)
+func (uc *useCase) MakeRedemption(customerID int, voucherIDs []int) (*model.Transaction, error) {
+	return uc.repo.MakeRedemption(customerID, voucherIDs)
 }
 
 func (uc *useCase) GetTransactionDetail(transactionID string) (*model.Transaction, error) {

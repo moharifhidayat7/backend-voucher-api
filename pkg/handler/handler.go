@@ -92,9 +92,8 @@ func (h *Handler) GetVouchersByBrandHandler(w http.ResponseWriter, r *http.Reque
 
 func (h *Handler) MakeRedemptionHandler(w http.ResponseWriter, r *http.Request) {
 	var redemptionRequest struct {
-		CustomerID        int     `json:"customer_id"`
-		VoucherIDs        []int   `json:"voucher_ids"`
-		TotalCostInPoints float64 `json:"total_cost_in_points"`
+		CustomerID int   `json:"customer_id"`
+		VoucherIDs []int `json:"voucher_ids"`
 	}
 
 	if err := json.NewDecoder(r.Body).Decode(&redemptionRequest); err != nil {
@@ -102,7 +101,7 @@ func (h *Handler) MakeRedemptionHandler(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	transaction, err := h.UseCase.MakeRedemption(redemptionRequest.CustomerID, redemptionRequest.VoucherIDs, redemptionRequest.TotalCostInPoints)
+	transaction, err := h.UseCase.MakeRedemption(redemptionRequest.CustomerID, redemptionRequest.VoucherIDs)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Error processing redemption: %v", err), http.StatusInternalServerError)
 		return

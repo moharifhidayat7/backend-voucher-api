@@ -4,6 +4,7 @@ import (
 	"voucher-api/pkg/model"
 
 	"github.com/jmoiron/sqlx"
+	"github.com/lib/pq"
 )
 
 type Repository interface {
@@ -11,7 +12,7 @@ type Repository interface {
 	CreateVoucher(brandID int, costInPoints float64, voucherCode string) (*model.Voucher, error)
 	GetVoucherByID(id string) (*model.Voucher, error)
 	GetVouchersByBrand(brandID string) ([]model.Voucher, error)
-	MakeRedemption(customerID int, voucherIDs []int, totalCostInPoints float64) (*model.Transaction, error)
+	MakeRedemption(customerID int, voucherIDs []int) (*model.Transaction, error)
 	GetTransactionDetail(transactionID string) (*model.Transaction, error)
 }
 
@@ -65,11 +66,17 @@ func (r *repository) GetVouchersByBrand(brandID string) ([]model.Voucher, error)
 	return vouchers, nil
 }
 
-func (r *repository) MakeRedemption(customerID int, voucherIDs []int, totalCostInPoints float64) (*model.Transaction, error) {
+func (r *repository) MakeRedemption(customerID int, voucherIDs []int) (*model.Transaction, error) {
 	tx := r.db.MustBegin()
+	var total_cost_in_points float64
+	errSum := tx.Get(&total_cost_in_points, `SELECT SUM(cost_in_points) FROM vouchers WHERE id = ANY($1)`, pq.Array(voucherIDs))
+	if errSum != nil {
+		tx.Rollback()
+		return nil, errSum
+	}
 
 	var transaction model.Transaction
-	err := tx.Get(&transaction, `INSERT INTO transactions (customer_id, total_cost_in_points) VALUES ($1, $2) RETURNING id`, customerID, totalCostInPoints)
+	err := tx.Get(&transaction, `INSERT INTO transactions (customer_id, total_cost_in_points) VALUES ($1, $2) RETURNING id`, customerID, total_cost_in_points)
 	if err != nil {
 		tx.Rollback()
 		return nil, err
