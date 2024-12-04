@@ -36,8 +36,8 @@ func (m *MockUseCase) GetVouchersByBrand(brandID string) ([]model.Voucher, error
 	return args.Get(0).([]model.Voucher), args.Error(1)
 }
 
-func (m *MockUseCase) MakeRedemption(customerID int, voucherIDs []int, totalCostInPoints float64) (*model.Transaction, error) {
-	args := m.Called(customerID, voucherIDs, totalCostInPoints)
+func (m *MockUseCase) MakeRedemption(customerID int, voucherIDs []int) (*model.Transaction, error) {
+	args := m.Called(customerID, voucherIDs)
 	return args.Get(0).(*model.Transaction), args.Error(1)
 }
 
@@ -121,12 +121,11 @@ func TestMakeRedemptionHandler(t *testing.T) {
 	mockUseCase := new(MockUseCase)
 	h := NewHandler(mockUseCase)
 
-	mockUseCase.On("MakeRedemption", 1, []int{1, 2}, 100.0).Return(&model.Transaction{ID: 1}, nil)
+	mockUseCase.On("MakeRedemption", 1, []int{1, 2}).Return(&model.Transaction{ID: 1}, nil)
 
 	redemption := map[string]interface{}{
-		"customer_id":          1,
-		"voucher_ids":          []int{1, 2},
-		"total_cost_in_points": 100.0,
+		"customer_id": 1,
+		"voucher_ids": []int{1, 2},
 	}
 	body, _ := json.Marshal(redemption)
 	req, _ := http.NewRequest("POST", "/redemption", bytes.NewBuffer(body))
