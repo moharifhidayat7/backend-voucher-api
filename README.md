@@ -95,7 +95,7 @@ This is a backend service for managing vouchers. The service is built with Go an
 - **Method**: `GET`
 - **Request**:
     ```sh
-    curl -X GET http://localhost:8080/voucher?id=1
+    curl -X GET "http://localhost:8080/voucher?id=1"
     ```
 
 ### Get Vouchers by Brand
@@ -103,11 +103,7 @@ This is a backend service for managing vouchers. The service is built with Go an
 - **Method**: `GET`
 - **Request**:
     ```sh
-    curl -X GET http://localhost:8080/voucher/brand \
-    -H "Content-Type: application/json" \
-    -d '{
-        "id": 1
-    }'
+    curl -X GET "http://localhost:8080/voucher/brand?id=1"
     ```
 
 ### Make a Redemption
@@ -118,7 +114,7 @@ This is a backend service for managing vouchers. The service is built with Go an
     curl -X POST http://localhost:8080/transaction/redemption \
     -H "Content-Type: application/json" \
     -d '{
-        "voucher_code": "VOUCHER_CODE",
+        "voucher_ids": [1,2,3],
         "customer_id": 1
     }'
     ```
@@ -128,9 +124,5 @@ This is a backend service for managing vouchers. The service is built with Go an
 - **Method**: `GET`
 - **Request**:
     ```sh
-    curl -X GET http://localhost:8080/transaction/redemption \
-    -H "Content-Type: application/json" \
-    -d '{
-        "transaction_id": 1
-    }'
+    curl -X GET "http://localhost:8080/transaction/redemption?transactionId=1"
     ```
