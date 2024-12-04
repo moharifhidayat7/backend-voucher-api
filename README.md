@@ -72,7 +72,7 @@ This is a backend service for managing vouchers. The service is built with Go an
     -H "Content-Type: application/json" \
     -d '{
         "name": "BrandName",
-        "description: "Brand Description"
+        "description": "Brand Description"
     }'
     ```
 
